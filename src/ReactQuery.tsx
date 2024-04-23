@@ -1,12 +1,14 @@
 import { useQuery } from 'react-query'
 import axios from 'axios'
 
+const fetchData = () => {
+    return axios.get(
+      'http://localhost:8080/data',
+    )
+}
+
 export const ReactQuery = () => {
-    const { isLoading, data, isError, error}: any = useQuery('get-product', () => {
-        return axios.get(
-          'http://localhost:8080/data',
-        )
-      })
+    const { isLoading, data, isError, error}: any = useQuery('get-product', fetchData)
 
   if (isLoading) return <>Loading...</>
   if (isError) return <h2>{error.message}</h2>
@@ -16,7 +18,7 @@ export const ReactQuery = () => {
       <div className='text-4xl'>ReactQuery</div>
       <ul className='list-disc p-4'>
         {data &&
-          data.items.map((product: any) => (
+          data.data.items.map((product: any) => (
             <li key={product.id}>
               {product.name} / {product.price}
             </li>

@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { Home } from './components/Home'
 import { AxiosQuery } from './AxiosQuery'
 import { ReactQuery } from './ReactQuery'
+import { ReactQueryDevtools } from "react-query/devtools"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path='/react-query' element={<ReactQuery />} />
         </Route>
       </Routes>
+      <ReactQueryDevtools initialIsOpen={false} position="bottom-right"></ReactQueryDevtools>
     </>
   )
 }
