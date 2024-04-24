@@ -8,10 +8,18 @@ const fetchData = () => {
 }
 
 export const ReactQuery = () => {
-    const { isLoading, data, isError, error}: any = useQuery('get-product', fetchData)
+    const { isLoading, isFetching, data, isError, error}: any = useQuery(
+      'get-product', fetchData,
+        {
+          refetchInterval: 2000,
+          refetchIntervalInBackground: true,
+        }
+    )
 
   if (isLoading) return <>Loading...</>
   if (isError) return <h2>{error.message}</h2>
+
+    console.log(isFetching)
 
   return (
     <>
