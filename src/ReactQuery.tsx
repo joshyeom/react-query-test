@@ -1,52 +1,37 @@
-import { useQuery } from 'react-query'
-import axios from 'axios'
-
-const fetchData = () => {
-    return axios.get(
-      'http://localhost:8080/data',
-    )
-}
+import { useProductName } from "./hooks/useProductName";
+import { Link } from "react-router-dom";
 
 export const ReactQuery = () => {
+  const onSuccess = (data) => {
+    console.log("데이터 가져오기 후 사이드 이펙트 수행", data);
+  };
 
-    const onSuccess = (data: any) => {
-      console.log("데이터 가져오기 후 사이드 이펙트 수행", data)
-    }
+  const onError = (error) => {
+    console.log("오류 발생 후 사이드 이펙트 수행", error);
+  };
 
-    const onError = (error: any) => {
-      console.log("오류 발생 후 사이드 이펙트 수행", error)
-    }
+  const { isLoading, data, isError, error } = useProductName(
+    onSuccess,
+    onError
+  );
 
-    const { isLoading, isFetching, data, isError, error, refetch}: any = useQuery(
-      'get-product', fetchData,
-        {
-          enabled: false,
-          onSuccess: onSuccess,
-          onError: onError,
-        }
-    )
+  console.log(data)
 
-  if (isLoading) return <>Loading...</>
-  if (isError) return <h2>{error.message}</h2>
-
+  if (isLoading) return <>Loading...</>;
+  if (isError) return <>{error.message}</>;
 
   return (
     <>
-      <button
-        onClick={refetch}
-        className="py-2 px-4 border bg-slate-100 rounded-md"
-      >
-        fetch data
-      </button>
-      <div className='text-4xl'>ReactQuery</div>
-      <ul className='list-disc p-4'>
+      <div className="text-4xl">ReactQuery</div>
+
+      <ul className="p-4 list-disc">
         {data &&
-          data.data.items.map((product: any) => (
+          data?.map((product) => (
             <li key={product.id}>
-              {product.name} / {product.price}
+              <Link to={`/react-query/${product.id}`}>{product.name}</Link>
             </li>
           ))}
       </ul>
     </>
-  )
-}
+  );
+};

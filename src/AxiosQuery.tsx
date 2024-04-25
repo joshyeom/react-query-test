@@ -29,7 +29,7 @@ export const AxiosQuery = () => {
   useEffect(() => {
     setIsLoading(true)
     axios
-      .get('http://localhost:8080/data')
+      .get('http://localhost:3000/data')
       .then((res: { data: dataType }) => {
         console.log(res)
         setData(res.data.items)
