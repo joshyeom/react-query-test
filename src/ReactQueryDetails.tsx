@@ -1,15 +1,29 @@
-import { useParams } from 'react-router-dom'
-import { useProductId } from './hooks/useProductId.js'
-import { ParallelQuery } from './ParallelQuery.tsx'
+import { useQuery, useQueryClient } from "react-query";
+import axios from "axios";
 
-export const ReactQueryDetails = () => {
-  const { productId } = useParams()
-  const { isLoading, isError, error, data } = useProductId(productId)
-  console.log(data)
-  if (isLoading) return <>Loading...</>
-  if (isError) return <>{error.message}</>
+const fetchProductDetails = (productId) => {
+  return axios.get(
+    `http://localhost:3000/data`
+  );
+};
 
-  return (
-    <ParallelQuery/>
-  )
-}
+export const useProductId = (productId) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    ["product-id", productId],
+    () => fetchProductDetails(productId),
+    {
+      initialData: () => {
+        const product = queryClient
+          .getQueryData("get-product")
+          ?.data?.items.find((p) => p.id === productId);
+
+        if (product) {
+          return {
+            data: product,
+          };
+        } else return undefined;
+      },
+    }
+  );
+};
